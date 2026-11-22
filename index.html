@@ -5,44 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Método símplex paso a paso</title>
   <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-  <header>
+  <header class="encabezado">
     <h1>Método símplex paso a paso</h1>
-    <p class="sub">Proyecto Programado · IF0012 Álgebra Lineal para Informática Empresarial · UCR, Sede del Caribe</p>
+    <p>Proyecto Programado de Álgebra Lineal para Informática Empresarial (IF0012), UCR, Sede del Caribe.</p>
   </header>
 
   <main>
-    <section class="tarjeta">
-      <h2>1. Modelo</h2>
-      <p class="ayuda">Maximizar Z = c·x, sujeto a A·x ≤ b y x ≥ 0, con b ≥ 0. Se aceptan enteros, decimales y fracciones (por ejemplo, 1/2).</p>
+    <section class="bloque" aria-labelledby="titulo-problema">
+      <h2 id="titulo-problema">El problema</h2>
 
-      <div class="fila-controles">
+      <div class="selector" role="group" aria-label="Elegir problema">
         <button type="button" data-ejemplo="servidor">Caso del servidor</button>
         <button type="button" data-ejemplo="guia">Ejemplo guía</button>
+        <button type="button" data-ejemplo="propio">Modelo propio</button>
       </div>
 
-      <div class="fila-controles">
-        <label>Variables <input id="num-variables" type="number" min="1" max="8" value="3"></label>
-        <label>Restricciones <input id="num-restricciones" type="number" min="1" max="8" value="3"></label>
-        <button type="button" id="crear-cuadricula">Crear cuadrícula vacía</button>
+      <div id="enunciado"></div>
+
+      <div id="editor" hidden>
+        <p class="nota">Maximizar Z = c·x con restricciones ≤ y b ≥ 0. Se aceptan enteros, decimales y fracciones como 1/2.</p>
+        <div class="controles">
+          <label>Variables <input id="num-variables" type="number" min="1" max="6" value="2"></label>
+          <label>Restricciones <input id="num-restricciones" type="number" min="1" max="6" value="2"></label>
+          <button type="button" id="crear-cuadricula">Cambiar tamaño</button>
+        </div>
+        <div id="cuadricula" class="desplazable"></div>
       </div>
 
-      <div id="cuadricula"></div>
+      <div id="modelo"></div>
 
-      <div class="fila-controles">
-        <button type="button" id="resolver" class="principal">Resolver</button>
+      <div class="controles">
+        <button type="button" id="resolver" class="principal">Resolver paso a paso</button>
       </div>
       <p id="error" class="error" role="alert"></p>
     </section>
 
-    <section id="pasos"></section>
-    <section id="resultado"></section>
+    <section id="solucion" class="bloque" hidden aria-live="polite">
+      <div class="barra-pasos">
+        <span id="contador"></span>
+        <div class="controles">
+          <button type="button" id="anterior">Anterior</button>
+          <button type="button" id="siguiente" class="principal">Siguiente</button>
+          <button type="button" id="ver-todo">Ver todo</button>
+        </div>
+      </div>
+      <div id="pasos"></div>
+    </section>
   </main>
 
   <footer>
-    Jorjanie Espinoza Ezpinoza y Angely Pérez Guido · II Semestre 2026
+    Jorjanie Espinoza Ezpinoza y Angely Pérez Guido, II Semestre 2026.
   </footer>
 
   <script type="module" src="js/interfaz.js"></script>
