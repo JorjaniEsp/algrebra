@@ -1,7 +1,7 @@
 # Método símplex paso a paso
 
 Aplicación programada del Proyecto Programado de **IF0012 Álgebra Lineal para Informática Empresarial** (UCR, Sede del Caribe, II Semestre 2026).
-Integrantes: Jorjanie Espinoza Ezpinoza y Angely Pérez Guido.
+Integrantes: Jorjanie Espinoza Espinoza y Angely Pérez Guido.
 
 Página web que resuelve modelos de programación lineal de la forma
 

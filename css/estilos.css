@@ -170,8 +170,9 @@ label input { margin-left: 6px; }
 .leyenda { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.9rem; margin-top: 6px; }
 .muestra { display: inline-block; width: 18px; height: 12px; margin-right: 6px; vertical-align: -1px; }
 
-.detalle { font-family: var(--formula); font-size: 1rem; color: var(--tinta); margin: 4px 0; overflow-x: auto; white-space: nowrap; }
-.detalle span { color: var(--grafito); font-family: var(--texto); font-size: 0.9rem; margin-right: 8px; }
+.detalle { font-family: var(--formula); font-size: 1rem; color: var(--tinta); margin: 10px 0; line-height: 1.9; max-width: none; }
+.detalle .etq { color: var(--grafito); font-family: var(--texto); font-size: 0.9rem; margin-right: 8px; }
+.detalle .vec { display: inline-block; max-width: 100%; white-space: nowrap; overflow-x: auto; vertical-align: bottom; }
 
 .resultado { font-family: var(--formula); font-size: 1.25rem; color: var(--tinta); margin: 6px 0; }
 .ok { color: #166534; }

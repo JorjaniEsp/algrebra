@@ -25,7 +25,8 @@ function terminoLineal(coeficientes, nombres) {
     if (coef.esCero()) return;
     const negativo = coef.esNegativa();
     const valor = negativo ? f(coef).slice(1) : f(coef);
-    const numero = valor === "1" ? "" : valor;
+    // Una fracción como coeficiente lleva paréntesis: (1/2)x₁, no 1/2x₁.
+    const numero = valor === "1" ? "" : valor.includes("/") ? `(${valor})` : valor;
     if (texto === "") texto += `${negativo ? "−" : ""}${numero}${nombres[j]}`;
     else texto += ` ${negativo ? "−" : "+"} ${numero}${nombres[j]}`;
   });
@@ -155,7 +156,8 @@ function matriz(tabla, base, nombres, marcas = null) {
 const vector = (fila) => {
   const valores = fila.map(f);
   const b = valores.pop();
-  return `(${valores.join(", ")} | ${b})`;
+  // Cada vector va en un bloque que no se parte, para que la línea solo se corte entre vectores.
+  return `<span class="vec">(${valores.join(", ")} | ${b})</span>`;
 };
 
 const leyenda = (entra, sale, pivote) => `
@@ -235,18 +237,18 @@ function construirPasos(r, modelo, datos) {
       const vieja = anterior.tabla[k];
       if (k === paso.fila) {
         if (paso.pivote.comparar(new Fraccion(1)) !== 0) {
-          html += `<p class="detalle"><span>${nombreFila}</span>${vector(vieja)} ÷ ${f(paso.pivote)} = ${vector(filaNueva)}</p>`;
+          html += `<p class="detalle"><span class="etq">${nombreFila}</span>${vector(vieja)} ÷ ${f(paso.pivote)} = ${vector(filaNueva)}</p>`;
         }
         return;
       }
       const factor = vieja[paso.entra];
       if (factor.esCero()) {
-        html += `<p class="detalle"><span>${nombreFila}</span>ya tiene 0 en la columna, no cambia</p>`;
+        html += `<p class="detalle"><span class="etq">${nombreFila}</span>ya tiene 0 en la columna, no cambia</p>`;
         return;
       }
       const signo = factor.esNegativa() ? "+" : "−";
       const absoluto = factor.esNegativa() ? new Fraccion(0).restar(factor) : factor;
-      html += `<p class="detalle"><span>${nombreFila}</span>${vector(vieja)} ${signo} ${f(absoluto)}·${vector(filaPivoteNueva)} = ${vector(filaNueva)}</p>`;
+      html += `<p class="detalle"><span class="etq">${nombreFila}</span>${vector(vieja)} ${signo} ${f(absoluto)}·${vector(filaPivoteNueva)} = ${vector(filaNueva)}</p>`;
     });
     html += '<div class="fila-paso"><span class="equivale">∼</span>';
     html += matriz(paso.tabla, paso.base, nombres) + "</div>";
@@ -274,7 +276,8 @@ function construirPasos(r, modelo, datos) {
 function pasoResultado(r, modelo, datos) {
   const res = r.resultado;
   const n = res.x.length;
-  const mayuscula = (texto) => texto.charAt(0).toUpperCase() + texto.slice(1);
+  // vCPU conserva su v minúscula aunque abra la frase.
+  const mayuscula = (texto) => (texto.startsWith("vCPU") ? texto : texto.charAt(0).toUpperCase() + texto.slice(1));
   const nombreRestriccion = (i) => (datos ? mayuscula(datos.restricciones[i]) : `R${i + 1}`);
 
   let html = "<h3>Resultado</h3>";
@@ -334,6 +337,8 @@ function ocultarSolucion() {
 
 function resolver() {
   $("error").textContent = "";
+  // Si hay un error, no debe quedar a la vista una solución anterior.
+  $("solucion").hidden = true;
   try {
     const datos = ejemploActual === "propio" ? null : EJEMPLOS[ejemploActual];
     const modelo = datos ? leerEjemplo(datos) : leerModeloPropio();
@@ -344,6 +349,7 @@ function resolver() {
     mostrarPaso(0);
     $("solucion").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
+    if (ejemploActual === "propio") $("modelo").innerHTML = "";
     $("error").textContent = error.message;
   }
 }
