@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método símplex paso a paso</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header>
+    <h1>Método símplex paso a paso</h1>
+    <p class="sub">Proyecto Programado · IF0012 Álgebra Lineal para Informática Empresarial · UCR, Sede del Caribe</p>
+  </header>
+
+  <main>
+    <section class="tarjeta">
+      <h2>1. Modelo</h2>
+      <p class="ayuda">Maximizar Z = c·x, sujeto a A·x ≤ b y x ≥ 0, con b ≥ 0. Se aceptan enteros, decimales y fracciones (por ejemplo, 1/2).</p>
+
+      <div class="fila-controles">
+        <button type="button" data-ejemplo="servidor">Caso del servidor</button>
+        <button type="button" data-ejemplo="guia">Ejemplo guía</button>
+      </div>
+
+      <div class="fila-controles">
+        <label>Variables <input id="num-variables" type="number" min="1" max="8" value="3"></label>
+        <label>Restricciones <input id="num-restricciones" type="number" min="1" max="8" value="3"></label>
+        <button type="button" id="crear-cuadricula">Crear cuadrícula vacía</button>
+      </div>
+
+      <div id="cuadricula"></div>
+
+      <div class="fila-controles">
+        <button type="button" id="resolver" class="principal">Resolver</button>
+      </div>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+
+    <section id="pasos"></section>
+    <section id="resultado"></section>
+  </main>
+
+  <footer>
+    Jorjanie Espinoza Ezpinoza y Angely Pérez Guido · II Semestre 2026
+  </footer>
+
+  <script type="module" src="js/interfaz.js"></script>
+</body>
+</html>

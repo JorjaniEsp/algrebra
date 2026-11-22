@@ -1,0 +1,10 @@
+{
+  "name": "simplex-pl",
+  "version": "1.0.0",
+  "description": "Método símplex paso a paso con fracciones exactas (Proyecto Programado IF0012, UCR)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node pruebas/pruebas.js"
+  }
+}
