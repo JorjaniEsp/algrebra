@@ -133,9 +133,12 @@ label input { margin-left: 6px; }
 .desplazable { overflow-x: auto; }
 .desplazable.con-desborde { box-shadow: inset -10px 0 8px -8px rgba(17, 70, 101, 0.35); }
 .pista { flex-basis: 100%; margin: 0 0 4px; font-size: 0.85rem; color: var(--grafito); }
-.entrada { border-collapse: collapse; }
-.entrada th { font-family: var(--formula); font-weight: 400; color: var(--grafito); padding: 4px 8px; }
-.entrada td { padding: 4px; text-align: center; }
+.ecuacion { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 6px; margin: 10px 0; font-family: var(--formula); font-size: 1.15rem; color: var(--tinta); }
+.ecuacion .etq-fila { min-width: 4.2em; font-weight: 600; }
+.ecuacion .termino { white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+.ecuacion .signo { margin: 0 2px; }
+.ecuacion input { width: 58px; }
+.ecuacion .variable { margin-right: 4px; }
 
 /* Pasos */
 .barra-pasos {

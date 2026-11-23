@@ -98,15 +98,17 @@ function elegirEjemplo(nombre) {
 // ---------- Modelo propio ----------
 
 function crearCuadricula(m) {
-  let html = '<table class="entrada"><tr><th></th><th>x₁</th><th>x₂</th><th></th><th>b</th></tr>';
-  html += '<tr><th>c</th><td><input id="g-c-0" aria-label="c₁"></td><td><input id="g-c-1" aria-label="c₂"></td><td></td><td></td></tr>';
+  // Cada línea se escribe como una ecuación: Z = [ ]x₁ + [ ]x₂ y R1: [ ]x₁ + [ ]x₂ ≤ [ ]
+  const campo = (id, etiqueta, j) =>
+    `<span class="termino">${j > 0 ? '<span class="signo">+</span> ' : ""}<input id="${id}" aria-label="${etiqueta}"><span class="variable">x${j === 0 ? "₁" : "₂"}</span></span>`;
+  let html = '<div class="ecuacion"><span class="etq-fila">Z =</span>' + campo("g-c-0", "c₁", 0) + campo("g-c-1", "c₂", 1) + "</div>";
   for (let i = 0; i < m; i++) {
-    html += `<tr><th>R${i + 1}</th>`;
-    html += `<td><input id="g-a-${i}-0" aria-label="R${i + 1}, x₁"></td><td><input id="g-a-${i}-1" aria-label="R${i + 1}, x₂"></td>`;
-    html += `<td><select id="g-op-${i}" aria-label="Signo de R${i + 1}"><option value="le">≤</option><option value="ge">≥</option><option value="eq">=</option></select></td>`;
-    html += `<td><input id="g-b-${i}" aria-label="b de R${i + 1}"></td></tr>`;
+    html += `<div class="ecuacion"><span class="etq-fila">R${i + 1}:</span>`;
+    html += campo(`g-a-${i}-0`, `R${i + 1}, x₁`, 0) + campo(`g-a-${i}-1`, `R${i + 1}, x₂`, 1);
+    html += `<span class="termino"><select id="g-op-${i}" aria-label="Signo de R${i + 1}"><option value="le">≤</option><option value="ge">≥</option><option value="eq">=</option></select> `;
+    html += `<input id="g-b-${i}" aria-label="b de R${i + 1}"></span></div>`;
   }
-  $("g-cuadricula").innerHTML = html + "</table>";
+  $("g-cuadricula").innerHTML = html;
   $("g-cuadricula").dataset.m = m;
 }
 

@@ -79,19 +79,18 @@ function leerEjemplo(e) {
 // ---------- Modelo propio ----------
 
 function crearCuadricula(n, m) {
-  let html = '<table class="entrada"><tr><th></th>';
-  for (let j = 0; j < n; j++) html += `<th>${x(j)}</th>`;
-  html += "<th></th><th>b</th></tr><tr><th>c</th>";
-  for (let j = 0; j < n; j++) html += `<td><input id="c-${j}" aria-label="c${subindice(j + 1)}"></td>`;
-  html += "<td></td><td></td></tr>";
+  // Cada línea se escribe como una ecuación: Z = [ ]x₁ + [ ]x₂ y R1: [ ]x₁ + [ ]x₂ ≤ [ ]
+  const termino = (id, etiqueta, j) =>
+    `<span class="termino">${j > 0 ? '<span class="signo">+</span> ' : ""}<input id="${id}" aria-label="${etiqueta}"><span class="variable">${x(j)}</span></span>`;
+  let html = '<div class="ecuacion"><span class="etq-fila">Máx Z =</span>';
+  for (let j = 0; j < n; j++) html += termino(`c-${j}`, `c${subindice(j + 1)}`, j);
+  html += "</div>";
   for (let i = 0; i < m; i++) {
-    html += `<tr><th>R${i + 1}</th>`;
-    for (let j = 0; j < n; j++) {
-      html += `<td><input id="a-${i}-${j}" aria-label="R${i + 1}, ${x(j)}"></td>`;
-    }
-    html += `<td>≤</td><td><input id="b-${i}" aria-label="b de R${i + 1}"></td></tr>`;
+    html += `<div class="ecuacion"><span class="etq-fila">R${i + 1}:</span>`;
+    for (let j = 0; j < n; j++) html += termino(`a-${i}-${j}`, `R${i + 1}, ${x(j)}`, j);
+    html += `<span class="termino"><span class="signo">≤</span> <input id="b-${i}" aria-label="b de R${i + 1}"></span></div>`;
   }
-  $("cuadricula").innerHTML = html + "</table>";
+  $("cuadricula").innerHTML = html;
   $("cuadricula").dataset.n = n;
   $("cuadricula").dataset.m = m;
 }
