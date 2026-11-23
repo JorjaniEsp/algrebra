@@ -9,6 +9,8 @@ Página web que resuelve modelos de programación lineal de la forma
 
 con el método símplex, mostrando cada paso como en clase: tabla inicial, variable que entra, prueba de razones, variable que sale, pivote, operaciones de fila (F₂ ← F₂ ÷ 16, …) y la tabla resultante. Todos los cálculos se hacen con fracciones exactas.
 
+La pestaña **Método gráfico** resuelve modelos de **2 variables** (maximizar o minimizar, con restricciones ≤, ≥ o =): rectas con sus interceptos, lado factible, gráfico de la región, vértices (con los que se descartan y por qué), Z en cada vértice y conclusión.
+
 ## Estructura
 
 ```
@@ -20,9 +22,13 @@ con el método símplex, mostrando cada paso como en clase: tabla inicial, varia
 │   ├── simplex.js      método símplex
 │   ├── verificacion.js comprobación de la solución
 │   ├── ejemplos.js     modelos del informe
-│   └── interfaz.js     lectura de datos y presentación
+│   ├── interfaz.js     lectura de datos y presentación del símplex
+│   ├── grafico.js      método gráfico: rectas, vértices y óptimo (fracciones exactas)
+│   ├── dibujo-grafico.js  dibujo del gráfico en SVG
+│   └── interfaz-grafico.js  lectura de datos y presentación del método gráfico
 ├── pruebas/
-│   └── pruebas.js      pruebas automáticas
+│   ├── pruebas.js      pruebas automáticas del símplex
+│   └── pruebas-grafico.js  pruebas automáticas del método gráfico
 ├── package.json
 └── README.md
 ```
@@ -36,13 +42,16 @@ con el método símplex, mostrando cada paso como en clase: tabla inicial, varia
 | `js/verificacion.js` | Comprueba la solución: cada restricción y la dualidad (b · precios sombra = Z*) |
 | `js/ejemplos.js` | Los dos modelos del informe: el caso del servidor virtual y el ejemplo guía |
 | `index.html`, `css/estilos.css`, `js/interfaz.js` | La página: cuadrícula de entrada y presentación de los pasos |
+| `js/grafico.js` | Método gráfico: intersección de rectas, vértices factibles, óptimo, región no acotada, sin solución y óptimos múltiples. No toca la página |
+| `js/dibujo-grafico.js`, `js/interfaz-grafico.js` | Dibujo SVG de la región factible y presentación de los 6 pasos del método gráfico |
 | `pruebas/pruebas.js` | Pruebas automáticas con los resultados de la resolución a mano |
+| `pruebas/pruebas-grafico.js` | Pruebas del método gráfico (ejemplo guía, minimizar con ≥ y casos especiales) |
 
 ## Cómo usarlo
 
 - En línea: abrir el enlace de Vercel.
 - En la computadora: servir la carpeta con cualquier servidor estático (por ejemplo, `npx serve .`) y abrir `index.html`. (Abrir el archivo con doble clic no funciona porque usa módulos de JavaScript.)
-- Pruebas: `node pruebas/pruebas.js` (requiere Node.js 18 o superior).
+- Pruebas: `npm test` (o `node pruebas/pruebas.js` y `node pruebas/pruebas-grafico.js`; requiere Node.js 18 o superior).
 
 ## Resultados esperados
 
@@ -50,3 +59,5 @@ con el método símplex, mostrando cada paso como en clase: tabla inicial, varia
 |---|---|---|---|
 | Caso del servidor | (2, 6, 0) | 44 | (1/2, 1/4, 0) |
 | Ejemplo guía | (6, 4) | 360 | (20, 10, 0) |
+
+El método gráfico da el mismo óptimo del ejemplo guía: vértice (6, 4) con Z = 360.

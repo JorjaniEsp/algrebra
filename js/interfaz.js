@@ -320,6 +320,7 @@ function mostrarPaso(indice) {
   $("contador").textContent = `Paso ${pasoActual + 1} de ${pasosHtml.length}`;
   $("anterior").disabled = pasoActual === 0;
   $("siguiente").disabled = pasoActual === pasosHtml.length - 1;
+  marcarDesbordes();
 }
 
 function mostrarTodo() {
@@ -328,6 +329,31 @@ function mostrarTodo() {
   $("anterior").disabled = false;
   $("siguiente").disabled = false;
   pasoActual = -1;
+  marcarDesbordes();
+}
+
+// En pantallas angostas la matriz no cabe: se avisa que se puede deslizar.
+function marcarDesbordes() {
+  document.querySelectorAll("#pasos .desplazable").forEach((caja) => {
+    const desborda = caja.scrollWidth > caja.clientWidth + 1;
+    const previo = caja.previousElementSibling;
+    const hayPista = previo !== null && previo.classList.contains("pista");
+    caja.classList.toggle("con-desborde", desborda);
+    if (desborda && !hayPista) {
+      caja.insertAdjacentHTML("beforebegin", '<p class="pista">Deslice la matriz hacia la derecha →</p>');
+    }
+    if (!desborda && hayPista) previo.remove();
+  });
+}
+
+// Tamaño del texto de los pasos (para el proyector): de 100 % a 200 %.
+let escala = 1;
+function cambiarEscala(delta) {
+  escala = Math.min(2, Math.max(1, Math.round((escala + delta) * 100) / 100));
+  $("pasos").style.zoom = String(escala);
+  $("texto-menos").disabled = escala <= 1;
+  $("texto-mas").disabled = escala >= 2;
+  marcarDesbordes();
 }
 
 function ocultarSolucion() {
@@ -346,6 +372,8 @@ function resolver() {
     const r = resolverSimplex(modelo.c, modelo.A, modelo.b);
     pasosHtml = construirPasos(r, modelo, datos);
     $("solucion").hidden = false;
+    // Se suelta el foco (por ejemplo, de una casilla) para que las flechas del teclado avancen los pasos.
+    if (document.activeElement) document.activeElement.blur();
     mostrarPaso(0);
     $("solucion").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
@@ -375,12 +403,21 @@ $("resolver").addEventListener("click", resolver);
 $("anterior").addEventListener("click", () => mostrarPaso(pasoActual === -1 ? 0 : pasoActual - 1));
 $("siguiente").addEventListener("click", () => mostrarPaso(pasoActual === -1 ? 0 : pasoActual + 1));
 $("ver-todo").addEventListener("click", mostrarTodo);
+$("texto-menos").addEventListener("click", () => cambiarEscala(-0.25));
+$("texto-mas").addEventListener("click", () => cambiarEscala(0.25));
+window.addEventListener("resize", marcarDesbordes);
 
-// Flechas del teclado para avanzar durante la exposición.
+// Enter dentro de una casilla del modelo propio resuelve, igual que el botón.
+// Flechas del teclado para avanzar durante la exposición (dentro de una casilla mueven el cursor).
 document.addEventListener("keydown", (evento) => {
-  if ($("solucion").hidden || evento.target.tagName === "INPUT") return;
+  if (evento.target.tagName === "INPUT") {
+    if (evento.key === "Enter" && evento.target.closest("#cuadricula")) resolver();
+    return;
+  }
+  if ($("solucion").hidden || evento.ctrlKey || evento.metaKey || evento.altKey) return;
   if (evento.key === "ArrowRight") mostrarPaso(pasoActual + 1);
   if (evento.key === "ArrowLeft") mostrarPaso(pasoActual - 1);
 });
 
+cambiarEscala(0);
 elegirEjemplo("servidor");

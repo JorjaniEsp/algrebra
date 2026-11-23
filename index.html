@@ -10,14 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
+<body data-modo="simplex">
   <header class="encabezado">
     <h1>Método símplex paso a paso</h1>
     <p>Proyecto Programado de Álgebra Lineal para Informática Empresarial (IF0012), UCR, Sede del Caribe.</p>
+    <div class="modos" role="group" aria-label="Elegir método">
+      <button type="button" data-modo="simplex" aria-pressed="true">Método símplex</button>
+      <button type="button" data-modo="grafico" aria-pressed="false">Método gráfico</button>
+    </div>
   </header>
 
   <main>
-    <section class="bloque" aria-labelledby="titulo-problema">
+    <section class="bloque modo-simplex" aria-labelledby="titulo-problema">
       <h2 id="titulo-problema">El problema</h2>
 
       <div class="selector" role="group" aria-label="Elegir problema">
@@ -46,9 +50,14 @@
       <p id="error" class="error" role="alert"></p>
     </section>
 
-    <section id="solucion" class="bloque" hidden aria-live="polite">
+    <section id="solucion" class="bloque modo-simplex" hidden aria-live="polite">
       <div class="barra-pasos">
         <span id="contador"></span>
+        <div class="controles texto" role="group" aria-label="Tamaño del texto de los pasos">
+          <span>Texto</span>
+          <button type="button" id="texto-menos" aria-label="Reducir el texto">A−</button>
+          <button type="button" id="texto-mas" aria-label="Agrandar el texto">A+</button>
+        </div>
         <div class="controles">
           <button type="button" id="anterior">Anterior</button>
           <button type="button" id="siguiente" class="principal">Siguiente</button>
@@ -57,6 +66,39 @@
       </div>
       <div id="pasos"></div>
     </section>
+
+    <section id="grafico" class="bloque modo-grafico" aria-labelledby="titulo-grafico">
+      <h2 id="titulo-grafico">El problema (2 variables)</h2>
+      <p class="nota">El método gráfico solo sirve con dos variables. El caso del servidor tiene tres, por eso se resuelve con el símplex.</p>
+
+      <div class="selector" role="group" aria-label="Elegir problema del método gráfico">
+        <button type="button" data-grafico="guia">Ejemplo guía</button>
+        <button type="button" data-grafico="propio">Modelo propio</button>
+      </div>
+
+      <div id="g-enunciado"></div>
+
+      <div id="g-editor" hidden>
+        <p class="nota">Se acepta maximizar o minimizar, con restricciones ≤, ≥ o =. Enteros, decimales y fracciones como 1/2.</p>
+        <div class="controles">
+          <label>Objetivo
+            <select id="g-sentido"><option value="max">Maximizar</option><option value="min">Minimizar</option></select>
+          </label>
+          <label>Restricciones <input id="g-num-restricciones" type="number" min="1" max="6" value="3"></label>
+          <button type="button" id="g-crear-cuadricula">Cambiar tamaño</button>
+        </div>
+        <div id="g-cuadricula" class="desplazable"></div>
+      </div>
+
+      <div id="g-modelo"></div>
+
+      <div class="controles">
+        <button type="button" id="g-resolver" class="principal">Resolver con el método gráfico</button>
+      </div>
+      <p id="g-error" class="error" role="alert"></p>
+    </section>
+
+    <section id="g-resultado" class="bloque modo-grafico" hidden aria-live="polite"></section>
   </main>
 
   <footer>
@@ -64,5 +106,6 @@
   </footer>
 
   <script type="module" src="js/interfaz.js"></script>
+  <script type="module" src="js/interfaz-grafico.js"></script>
 </body>
 </html>

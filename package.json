@@ -5,6 +5,6 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "node pruebas/pruebas.js"
+    "test": "node pruebas/pruebas.js && node pruebas/pruebas-grafico.js"
   }
 }

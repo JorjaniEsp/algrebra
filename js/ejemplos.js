@@ -41,3 +41,21 @@ export const EJEMPLOS = {
     b: ["10", "16", "8"],
   },
 };
+
+// Modelos del método gráfico (solo 2 variables). El caso del servidor tiene 3, por eso no está aquí.
+export const EJEMPLOS_GRAFICO = {
+  guia: {
+    titulo: "Ejemplo guía: empresa de software",
+    enunciado: EJEMPLOS.guia.enunciado,
+    variables: EJEMPLOS.guia.variables,
+    objetivo: EJEMPLOS.guia.objetivo,
+    sentido: "max",
+    c: EJEMPLOS.guia.c,
+    restricciones: EJEMPLOS.guia.restricciones.map((etiqueta, i) => ({
+      etiqueta,
+      a: EJEMPLOS.guia.A[i],
+      op: "<=",
+      b: EJEMPLOS.guia.b[i],
+    })),
+  },
+};

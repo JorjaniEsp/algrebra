@@ -120,6 +120,8 @@ label input { margin-left: 6px; }
 
 /* Cuadrícula de entrada */
 .desplazable { overflow-x: auto; }
+.desplazable.con-desborde { box-shadow: inset -10px 0 8px -8px rgba(30, 58, 138, 0.35); }
+.pista { flex-basis: 100%; margin: 0 0 4px; font-size: 0.85rem; color: var(--grafito); }
 .entrada { border-collapse: collapse; }
 .entrada th { font-family: var(--formula); font-weight: 400; color: var(--grafito); padding: 4px 8px; }
 .entrada td { padding: 4px; text-align: center; }
@@ -136,6 +138,9 @@ label input { margin-left: 6px; }
 }
 .barra-pasos .controles { margin: 0; }
 #contador { font-weight: 700; color: var(--tinta); }
+.barra-pasos .texto { gap: 6px; }
+.texto span { font-size: 0.9rem; }
+.texto button { min-width: 44px; padding: 7px 10px; }
 
 .paso { padding: 18px 0 6px; }
 .paso + .paso { border-top: 1.5px dashed var(--cuadricula); }
@@ -182,4 +187,58 @@ label input { margin-left: 6px; }
   body { font-size: 16px; }
   h1 { font-size: 1.8rem; }
   .bloque { padding: 16px; }
+}
+
+/* ---------- Método gráfico ---------- */
+body[data-modo="grafico"] .modo-simplex { display: none; }
+body[data-modo="simplex"] .modo-grafico { display: none; }
+
+.modos { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+.modos button[aria-pressed="true"] { background: var(--tinta); color: var(--papel); }
+
+select {
+  font-family: var(--formula);
+  font-size: 1rem;
+  padding: 4px 6px;
+  border: 1.5px solid #b8c3d9;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--tinta);
+}
+label select { margin-left: 6px; }
+
+.tabla { border-collapse: collapse; margin: 8px 0 14px; font-family: var(--formula); font-size: 1.05rem; color: var(--tinta); }
+.tabla th, .tabla td { border: 1.5px solid #b8c3d9; padding: 5px 12px; text-align: center; }
+.tabla th { background: #eef2fb; font-weight: 600; }
+.tabla td.explica { text-align: left; font-family: var(--texto); font-size: 0.95rem; color: var(--grafito); }
+.tabla td { white-space: nowrap; }
+.tabla td.explica { white-space: normal; }
+.tabla tr.optimo td { background: var(--marcador-rosado); font-weight: 600; }
+.tabla tr.descartado td { color: var(--grafito); }
+
+.figura { margin: 12px 0; overflow-x: auto; }
+.figura svg { display: block; width: 100%; min-width: 560px; max-width: 760px; height: auto; background: var(--papel); border: 1.5px solid var(--cuadricula); }
+
+.grafico-svg text { font-family: var(--formula); }
+.g-malla { stroke: var(--cuadricula); stroke-width: 1; }
+.g-eje { stroke: var(--tinta); stroke-width: 2; }
+.g-marca { font-size: 13px; fill: var(--grafito); }
+.g-titulo-eje { font-size: 17px; fill: var(--tinta); font-style: italic; }
+.g-region { fill: var(--marcador-celeste); fill-opacity: 0.55; stroke: none; }
+.g-segmento { stroke: var(--marcador-celeste); stroke-width: 9; stroke-linecap: round; fill: none; }
+.g-segmento-optimo { stroke: var(--marcador-rosado); stroke-width: 7; stroke-linecap: round; fill: none; }
+.g-recta { stroke: var(--tinta); stroke-width: 2; }
+.g-nivel { stroke: var(--grafito); stroke-width: 1.8; stroke-dasharray: 7 5; }
+.g-etiqueta { font-size: 15px; font-weight: 600; fill: var(--tinta); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+.g-vertice { fill: #fff; stroke: var(--tinta); stroke-width: 2; }
+.g-optimo { fill: var(--marcador-rosado); stroke: var(--tinta); stroke-width: 2.5; }
+.g-etiqueta-vertice { font-size: 14px; fill: var(--tinta); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+.g-etiqueta-optimo { font-size: 15px; font-weight: 700; fill: var(--tinta); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+
+.leyenda .linea { display: inline-block; width: 22px; height: 0; border-top: 2px dashed var(--grafito); margin-right: 6px; vertical-align: 4px; }
+.leyenda .punto { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--marcador-rosado); border: 2px solid var(--tinta); margin-right: 6px; vertical-align: -2px; }
+
+@media (max-width: 600px) {
+  .tabla { font-size: 0.95rem; }
+  .tabla th, .tabla td { padding: 4px 8px; }
 }
