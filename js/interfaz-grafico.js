@@ -1,7 +1,6 @@
 // Interfaz del método gráfico: elegir el problema, resolverlo y mostrar cada paso con su gráfico.
 
 import { Fraccion } from "./fraccion.js";
-import { resolverSimplex } from "./simplex.js";
 import { analizarGrafico, evaluar, simboloOperador } from "./grafico.js";
 import { dibujarGrafico } from "./dibujo-grafico.js";
 import { EJEMPLOS_GRAFICO } from "./ejemplos.js";
@@ -186,7 +185,7 @@ function pasoGrafico(modelo, analisis) {
   let html = "<h3>Paso 3. Región factible</h3>";
   html += `<div class="figura">${dibujarGrafico(modelo, analisis)}</div>`;
   html += '<div class="leyenda">';
-  html += '<span><span class="muestra" style="background:var(--marcador-celeste)"></span>región factible</span>';
+  html += '<span><span class="muestra region"></span>región factible</span>';
   if (analisis.optimo) {
     html += `<span><span class="punto"></span>óptimo</span>`;
     html += `<span><span class="linea"></span>recta de nivel Z = ${f(analisis.optimo.z)}</span>`;
@@ -237,21 +236,6 @@ function queLimita(modelo, analisis, datos) {
   return `<h3>Qué restricciones limitan</h3><p>${lineas.join("<br>")}</p>`;
 }
 
-function comprobacionSimplex(modelo, analisis) {
-  if (modelo.sentido !== "max" || modelo.restricciones.some((r) => r.op !== "<=" || r.b.esNegativa())) return "";
-  try {
-    const r = resolverSimplex(modelo.c, modelo.restricciones.map((x) => x.a), modelo.restricciones.map((x) => x.b));
-    if (analisis.estado === "no_acotado") {
-      return r.estado === "ilimitado" ? '<p class="ok">Comprobación con el símplex: también detecta que el problema es ilimitado ✓</p>' : "";
-    }
-    if (r.estado !== "optimo" || !analisis.optimo) return "";
-    const coincide = r.resultado.z.comparar(analisis.optimo.z) === 0;
-    return `<p class="${coincide ? "ok" : "mal"}">Comprobación con el símplex: Z* = ${f(r.resultado.z)} ${coincide ? "✓ (coincide con el gráfico)" : "✗ (no coincide con el gráfico)"}</p>`;
-  } catch {
-    return "";
-  }
-}
-
 function pasoConclusion(modelo, analisis, datos) {
   const palabra = modelo.sentido === "max" ? "máximo" : "mínimo";
   let html = "<h3>Paso 6. Conclusión</h3>";
@@ -259,7 +243,7 @@ function pasoConclusion(modelo, analisis, datos) {
     return html + '<p class="mal">No hay ningún punto que cumpla todas las restricciones a la vez: la región factible está vacía y el problema no tiene solución.</p>';
   }
   if (analisis.estado === "no_acotado") {
-    return html + `<p class="mal">La región no está acotada y Z mejora sin límite al avanzar en la dirección ${par(analisis.direccion)}. El problema no tiene un ${palabra} finito.</p>` + comprobacionSimplex(modelo, analisis);
+    return html + `<p class="mal">La región no está acotada y Z mejora sin límite al avanzar en la dirección ${par(analisis.direccion)}. El problema no tiene un ${palabra} finito.</p>`;
   }
   const z = f(analisis.optimo.z);
   if (analisis.estado === "multiple") {
@@ -268,17 +252,17 @@ function pasoConclusion(modelo, analisis, datos) {
     } else {
       html += `<p>Hay infinitas soluciones óptimas: desde ${par(analisis.optimo.puntos[0])} en la dirección ${par(analisis.direccion)} Z se mantiene en su ${palabra}, Z* = ${z}.</p>`;
     }
-    return html + comprobacionSimplex(modelo, analisis);
+    return html;
   }
   const p = analisis.optimo.puntos[0];
-  html += `<p class="resultado">${palabra.charAt(0).toUpperCase() + palabra.slice(1)} en el vértice ${par(p)}: Z* = ${z}</p>`;
+  html += `<p class="resultado final">${palabra.charAt(0).toUpperCase() + palabra.slice(1)} en el vértice ${par(p)}: Z* = ${z}</p>`;
   if (datos) {
     html += `<p>Conviene ${f(p[0])} ${datos.variables[0]} y ${f(p[1])} ${datos.variables[1]}, con un valor de ${z} ${datos.objetivo}.</p>`;
     html += queLimita(modelo, analisis, datos);
   } else {
     html += queLimita(modelo, analisis, null);
   }
-  return html + comprobacionSimplex(modelo, analisis);
+  return html;
 }
 
 function construirResultado(modelo, analisis, datos) {

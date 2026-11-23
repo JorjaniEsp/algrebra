@@ -281,7 +281,7 @@ function pasoResultado(r, modelo, datos) {
   const nombreRestriccion = (i) => (datos ? mayuscula(datos.restricciones[i]) : `R${i + 1}`);
 
   let html = "<h3>Resultado</h3>";
-  html += `<p class="resultado">${res.x.map((v, j) => `${x(j)} = ${f(v)}`).join(", ")}; Z* = ${f(res.z)}</p>`;
+  html += `<p class="resultado final">${res.x.map((v, j) => `${x(j)} = ${f(v)}`).join(", ")}; Z* = ${f(res.z)}</p>`;
   if (datos) {
     html += `<p>Conviene ${res.x.map((v, j) => `${f(v)} ${datos.variables[j]}`).join(", ")}, con un valor de ${f(res.z)} ${datos.objetivo}.</p>`;
   }
